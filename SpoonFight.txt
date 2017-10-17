@@ -1,0 +1,90 @@
+Readme.
+Spoon Fight
+"you don't take a spoon to a knife fight"
+
+spoon main file
+--has the argparser and logging
+--has the OSC receive stuff
+--has the 4 loops
+
+
+AudioEngine class
+has the callback stuff
+does the mixing of the loops
+sets up the IO
+
+AudioLoop class
+--has slice objects (points in the audiofile and playback modes )
+--has a get_samples() method
+--has an AudioBuffer that has been loaded from a file
+--is passed an audioBuffer and slice points on creation
+--
+
+
+AudFileLoader class
+--helper class
+--gets given an audio file path and a slice style and returns the audio buffer and the slice locations.
+--to start with will use just even divide-by-8 slice points. in future will 
+
+
+============== Useful tools used for testing.
+pylint
+pyreverse -my -A -o png -p test *.py
+pyflakes *.py
+
+pycallgraph --max-depth 5 -t graphviz -- SpoonFight.py
+
+==Unit testing
+https://hypothesis.readthedocs.io/en/latest/
+
+http://pyunit.sourceforge.net/pyunit.html
+
+== other stuff for making the code robust:
+
+http://blog.zulip.org/2016/10/13/static-types-in-python-oh-mypy/
+
+=========  OSC control maps
+
+OSC Control Points
+/playback/start
+/playback/stop
+
+/loop/1/slice/1
+/loop/4/slice/5 ... etc
+
+/loop/1/mode stop
+/loop/1/ start
+/loop/1/ reset
+/loop/1/ restart
+
+=================================UI stuff=========
+GUI for seeing whats going on
+01234567890123456789012345678901234567890123456789012345678901234567890123456789
+                      =======SPOON FIGHT=======                                  0
+                      =======SPOON FIGHT=======                                  1
+                      =======SPOON FIGHT=======                                  2
+-------------------------------------------------------------------------------- 3
+LOOP1:PLAY_FWD=[=PLY==PLY==PLY==PLY==PLY==PLY==PLY==PLY=]=SEQ:_1_2_3_4_5_6_7_8   4
+LOOP1:filepathfilepath.wav  44100                                                5
+                                                                                 6
+LOOP2:PLAY_FWD=[=PLY=PLY=PLY=PLY=PLY=PLY=PLY=PLY=]=SEQ:_1_2_3_4_5_6_7_8          7
+LOOP2:filepathfilepath.wav                                                       8
+                                                                                 9
+LOOP3:PLAY_FWD=[=PLY=PLY=PLY=PLY=PLY=PLY=PLY=PLY=]=SEQ:_1_2_3_4_5_6_7_8          0
+LOOP3:filepathfilepath.wav                                                       1
+                                                                                 2
+LOOP4:PLAY_FWD=[=PLY=PLY=PLY=PLY=PLY=PLY=PLY=PLY=]=SEQ:_1_2_3_4_5_6_7_8          3
+LOOP4:filepathfilepath.wav                                                       4
+-------------------------------------------------------------------------------  5
+ACTION LOG
+ACTION LOG
+ACTION LOG
+ACTION LOG
+ACTION LOG
+ACTION LOG
+ACTION LOG
+
+
+
+
+

@@ -1,0 +1,13 @@
+requirements
+
+Python libraries needed:
+
+numpy
+pythonosc
+asciimatics
+better_exceptions
+traceback
+argparse
+soundfile
+pprint
+pyaudio
