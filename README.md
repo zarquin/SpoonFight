@@ -23,7 +23,7 @@ To use it:
 5: to make things exciting run the test_send.py to send random commands to SpoonFight via OSC.
  >python test_send.py
 
-#TODO
+# TODO
 These are things that are planned to be done in the immediate future
 -standardise on the naming style.  ClassDeclerationsAndFileNamesUseCamelCase.  functions_and_variables_use_this_style
 -Add additional OSC handlers for volume, loop playback reset,  an "All Loops" category, etc..
