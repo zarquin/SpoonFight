@@ -1,13 +1,6 @@
-requirements
-
-Python libraries needed:
-
-numpy
-pythonosc
-asciimatics
-better_exceptions
-traceback
-argparse
-soundfile
-pprint
-pyaudio
+asciimatics>=1.8.0
+better-exceptions>=0.1.8
+numpy>=1.13.3
+PyAudio>=0.2.11
+python-osc>=1.6.3
+SoundFile>=0.9.0.post1
