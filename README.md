@@ -11,7 +11,7 @@ To use it:
  --numpy
  --pyaudio
  --better_exceptions (not used, but looks nicer when things go wrong)
- --pythonosc
+ --python-osc
  --soundfile
 
 3: Create a patch file.  you can copy the testPatch3.patch structure and put your own loop files in there.
