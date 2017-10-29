@@ -82,6 +82,14 @@ class SpnAudioLoop():
             j.reset_playback()
         return
     
+    def jump_slice(self, new_position):
+        i = self.current_slice
+        #set the new slice position.
+        self.current_slice = new_position
+        #reset the previous slice audio 
+        self.audio_slices[i].reset_playback()
+        return
+    
     def set_volume(self, new_volume):
         # if the volume value is a float then we can set it
         if(type(new_volume)==type(1.0)):

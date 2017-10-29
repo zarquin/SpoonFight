@@ -26,6 +26,12 @@ def set_loop_mode(loop_number, new_mode, the_status_obj):
     loop_id_s = "/loop/{}".format(loop_number)
     the_status_obj.loops[loop_id_s].set_loop_mode(new_mode)
     D("set the loop mode {} : {} ".format(loop_id_s, new_mode))
+    
+def set_loop_jump(loop_number, new_position, the_status_obj):
+    loop_id_s = "/loop/{}".format(loop_number)
+    the_status_obj.loops[loop_id_s].jump_slice(new_position)
+    D("set  {} new focus to {}".format(loop_id_s,new_position))
+    return
 
 def loop_mode_callback(unused_addr, args, the_OSC_message_argument):
     D("LoopCallback")
@@ -68,7 +74,48 @@ def loop_mode_callback(unused_addr, args, the_OSC_message_argument):
         return
     #print("Loop:{}  slice:{}".format(loop_i,slice_i))  
     return
+
+def loop_jump_callback(unused_addr, args, the_OSC_message_argument):
+    D("loop jump callback")
+    message_ok = True
     
+    if(len(unused_addr) != 12):
+        message_ok = False
+
+    
+    the_status_obj = args[0]
+    try:
+        loop_s = unused_addr[6]
+        loop_i = int(loop_s)
+        jump_i = int(the_OSC_message_argument)
+        
+    except Exception as jj:
+        L("Exception parsing {} {}".format(unused_addr), the_OSC_message_argument)
+        L("Exception {} ".format(jj))
+        message_ok = False
+        loop_i = -1
+        jump_i = -1
+    
+    if(loop_i >4 or loop_i<1):
+        D("Loop value out of range {} ".format(loop_i))
+        message_ok = False
+    if(jump_i >7 or jump_i <0):
+        D("jump value out of range {}".format(jump_i))
+        message_ok = False
+    
+    
+    
+    
+    if(message_ok):
+        set_loop_jump(loop_i, jump_i, the_status_obj)
+        the_status_obj.set_osc_message( "{} : {}  DONE".format(unused_addr, the_OSC_message_argument))
+    else:
+        # log error message
+        #TODO fix this error message
+        L("unable to parse message {} {} ".format(unused_addr, the_OSC_message_argument))
+        the_status_obj.set_osc_message( "{} : {}  FAIL".format(unused_addr, the_OSC_message_argument))
+        return
+        
     
 def slice_callback(unused_addr, args, the_OSC_message_argument):
     D("SliceCallback")
@@ -134,6 +181,7 @@ def start_OSC_server(spoon_status_object):
 
     disp.map("/loop/*/slice/*", slice_callback, spoon_status_object)
     disp.map("/loop/*/mode", loop_mode_callback, spoon_status_object)
+    disp.map("/loop/*/jump", loop_jump_callback, spoon_status_object)
     disp.set_default_handler(default_callback)
     
     new_osc_port = spoon_status_object.osc_port
