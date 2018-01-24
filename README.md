@@ -23,6 +23,10 @@ To use it:
 5: to make things exciting run the test_send.py to send random commands to SpoonFight via OSC.
  >python test_send.py
 
+# Example Videos
+Some videos of SpoonFight in action
+[A glitch/experimental demo](https://www.youtube.com/watch?v=wj-J3XSGHnc)
+
 # TODO
 These are things that are planned to be done in the immediate future
 
