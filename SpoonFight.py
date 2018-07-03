@@ -55,7 +55,6 @@ class SpoonFightStatus:
     """
     
     def __init__(self, new_osc_port):            
-        
         self.status_message = "starting"    
         #dictionary to store the loops
         self.loops = {'/loop/1': None, '/loop/2': None, '/loop/3': None, '/loop/4': None }
@@ -115,6 +114,15 @@ def loop_till_forever(screen):
         ev = screen.get_key()
         if ev in (ord('Q'), ord('q')):
             running=False
+
+        if ev in (ord('M'), ord('m')):
+            #mute or un-mute audio
+            spoon_fight_status.set_status_message("Mute key pressed")
+            audioEngine.toggle_mute()
+			
+#		if ev in (ord(' ')):
+#			#pause playback.  this seems like a possibly bad idea since we might loose synch with the launcpad controller.			
+		
         screen.refresh()
         time.sleep(0.05)
     
@@ -125,8 +133,7 @@ def loop_till_forever(screen):
     return
 
 def main():
-    
-    
+      
     parser = argparse.ArgumentParser(
     description=DESC_NAME , formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
@@ -146,8 +153,7 @@ def main():
     #create the status 
     global spoon_fight_status
     spoon_fight_status = SpoonFightStatus( args.oscport)
-    
-    
+     
     #create the four loops
     spoon_fight_status.loops['/loop/1'] = SpnAudioLoop('/loop/1')
     spoon_fight_status.loops['/loop/2'] = SpnAudioLoop('/loop/2')
@@ -160,7 +166,9 @@ def main():
     
     # open patch file
     ret_loops = SpnPatchParser.SpnPatchParser(args.patchfile)
-        
+    
+    spoon_fight_status.set_status_message("loaded {} loops".format(len(ret_loops)))
+    
     i=0
     spoon_fight_status.loops['/loop/1'].set_audio_buffer( ret_loops[i].get_audio_data(),ret_loops[i].get_slice_points() )
     spoon_fight_status.loops['/loop/1'].set_audio_file_name(ret_loops[i].audio_section_name )

@@ -145,7 +145,6 @@ class SpnAudioLoop():
         D("{} Updated slice was {} now {} mode {}".format(self.name, old_slice, self.current_slice, self.loop_mode))
         return
        
-                 
     def get_audio(self, number_of_samples):
         #return audio 
         ret_data = np.zeros([0,2])
@@ -193,5 +192,5 @@ class SpnAudioLoop():
         return ret_data
 
   
-        
+    
             
