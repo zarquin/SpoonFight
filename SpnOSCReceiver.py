@@ -36,7 +36,7 @@ def set_loop_jump(loop_number, new_position, the_status_obj):
 def set_loop_volume(loop_number, new_vol, the_status_obj):
     loop_id_s = "/loop/{}".format(loop_number)
     the_status_obj.loops[loop_id_s].set_volume(new_vol)
-    D("set {} volume to {}".format(loop_ids, new_vol )
+    D("set {} volume to {}".format(loop_ids, new_vol ))
     return
     
 def loop_mode_callback(unused_addr, args, the_OSC_message_argument):
@@ -177,7 +177,7 @@ def slice_callback(unused_addr, args, the_OSC_message_argument):
     #print("Loop:{}  slice:{}".format(loop_i,slice_i))  
     return
 
-def loop_volume_callback(unused_args, args, the_OSC_message_argument ):
+def loop_volume_callback(unused_addr, args, the_OSC_message_argument ):
     D("loop_volume_callback")
     #set the volume level of a loop.
     #.set_volume(float)
@@ -204,10 +204,18 @@ def loop_volume_callback(unused_args, args, the_OSC_message_argument ):
         D("Loop value out of range {} ".format(loop_i))
         #do nothing
         message_ok = False
+    #convert the argument to a float.
     try:
         new_volume_level = float(the_OSC_message_argument)
         if(new_volume_level < 0.0):
             message_ok = False
+    #float parsing error handling.        
+    except Exception as flt_error:
+        L("exception handing OSC message {}".format(unused_addr))
+        L("exception parsing {}".format( the_OSC_message_argument))
+        L("Exception: {}".format(flt_error))
+        L("{}".format(rep(flt_error)))
+        message_ok = False
         
     if(message_ok):
         set_loop_volume(loop_i, new_volume_level, the_status_obj)
@@ -218,7 +226,11 @@ def loop_volume_callback(unused_args, args, the_OSC_message_argument ):
         L("unable to parse message {} {} ".format(unused_addr, the_OSC_message_argument))
         the_status_obj.set_osc_message( "{} : {}  FAIL".format(unused_addr, the_OSC_message_argument))
     return
-    
+ 
+def loop_file_callback(unused_addr, args, the_OSC_message_argument):
+    D("loop file callback")
+    D("un-implemented!!")
+    return
     
 def default_callback(unused_addr, args):
     L("unknown message {} {}".format(unused_addr, args))
