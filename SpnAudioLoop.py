@@ -94,6 +94,17 @@ class SpnAudioLoop():
         # if the volume value is a float then we can set it
         if(type(new_volume)==type(1.0)):
             self.volume_gain = new_volume
+        else:
+            D(" Set Volume failed. {} {}".format(type(new_volume),new_volume))
+            return
+        #limit volume to 0.0 - 1.0
+        
+        if (self.volume_gain > 1.0):
+            self.volume_gain =1.0
+        
+        if (self.volume_gain<0.0):
+            self.volume_gain = 0.0
+        
         D(" Set Volume {} {}".format(type(new_volume),new_volume))
         return
     
