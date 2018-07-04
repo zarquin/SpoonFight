@@ -1,6 +1,0 @@
-INFO:MainThread:SpnPatchParser.py:test_file_correctness:File loops/KICKDRUMONE.wav is OK.
-INFO:MainThread:SpnPatchParser.py:test_file_correctness:File loops/SNAREHATONE.wav is OK.
-INFO:MainThread:SpnPatchParser.py:test_file_correctness:File loops/SHITTYBASSONE.wav is OK.
-INFO:MainThread:SpnPatchParser.py:test_file_correctness:File loops/WEIRDNOISEONE.wav is OK.
-INFO:MainThread:SpnPatchParser.py:test_file_correctness:File loops/TriangleLoopOne.wav is OK.
-INFO:MainThread:SpnPatchParser.py:test_file_correctness:File loops/ShakerLoopOne.wav is OK.
