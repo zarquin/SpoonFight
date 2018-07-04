@@ -1,15 +1,4 @@
 #SpnTUI.py
-"""
-This is a patch file parser for spoon fight.
-A patch really is just a collection of audio files and slices if specified
-
-[loop_name]
-filepath:pathtofile
-slicepoints: 0 , 123, 231, 300,   #if slicepoints are listed, then this has priority as long as it's real.
-#or
-slicestyle: even #or peak
-
-"""
 
 """
 Asciimatics colours
