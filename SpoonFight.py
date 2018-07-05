@@ -64,6 +64,7 @@ class SpoonFightStatus:
         self.osc_port = new_osc_port
         self.osc_message = "OSC starting"
         self.verbose_flag = False
+        self.audio_loop_files = [] #empty list.  populate from patch file.
         return
 
     def set_status_message(self, new_message, verbose_message=False):
@@ -75,6 +76,39 @@ class SpoonFightStatus:
         self.status_message = new_message
         self.event_history.append('S: {}'.format(new_message) )
         return
+    
+    def add_audio_loop_files(self, loops_to_add):
+        self.audio_loop_files.append(loops_to_add)
+        return
+    
+    def load_new_audio_file_by_index(self, loop_name, file_index):
+        # try to load a new file into a loop.
+        # is the requested file index available?
+        
+        if(file_index <0 or file_index > len(self.audio_loop_files) ):
+            # file index is out of bounds.  give feedback and return without doing anything else.
+            self.set_status_message(" Attempted to set new loop{} file. out of bounds {}".format(loop_name, file_index))
+            self.set_status_message(" there are {} audio files avalaible".format(len(self.audio_loop_files)))
+            return
+        # numbers make sense. let's change over the audio buffers.
+        # get the audio file and slice point information and copy over.
+        temp_audio_data = self.audio_loop_files[file_index].get_audio_data()
+        temp_slice_points = self.audio_loop_files[file_index].get_slice_points()
+        temp_name = self.audio_loop_files.audio_section_name
+        
+        #stop the loop.
+        self.loops[loop_name].set_loop_mode(LOOP_MODES.STOP)
+        
+        # clear the existing audio slices.
+        self.loops[loop_name].dump_audio_slices()
+        #copy data over.
+        self.loops[loop_name].set_audio_buffer( temp_audio_data, temp_slice_points )
+        self.loops[loop_name].set_audio_file_name(temp_name )
+        # let user know audio loop has been changed over.
+        self.set_status_message("New Audio File loaded for {}".format(loop_name))
+        
+        return
+    
     
     def set_osc_message(self, new_message, verbose_message=False):
         #if it's a message to display in verbose mode,  verbose_message will be true and verbose_flag will be true
@@ -117,18 +151,15 @@ def loop_till_forever(screen):
 
         if ev in (ord('M'), ord('m')):
             #mute or un-mute audio
-            spoon_fight_status.set_status_message("Mute key pressed")
-            audioEngine.toggle_mute()
-			
-#		if ev in (ord(' ')):
-#			#pause playback.  this seems like a possibly bad idea since we might loose synch with the launcpad controller.			
+            am_i_muted=audioEngine.toggle_mute()
+            spoon_fight_status.set_status_message("Mute toggled. currently {}".format(am_i_muted))
 		
         screen.refresh()
         time.sleep(0.05)
     
     #time.sleep(10)
     
-    #if we quite clean up audio
+    #if we quit clean up audio
     audioEngine.stop_audio()
     return
 
@@ -168,24 +199,25 @@ def main():
     ret_loops = SpnPatchParser.SpnPatchParser(args.patchfile)
     
     spoon_fight_status.set_status_message("loaded {} loops".format(len(ret_loops)))
+    spoon_fight_status.add_audio_loop_files(ret_loops)
     
     i=0
     spoon_fight_status.loops['/loop/1'].set_audio_buffer( ret_loops[i].get_audio_data(),ret_loops[i].get_slice_points() )
     spoon_fight_status.loops['/loop/1'].set_audio_file_name(ret_loops[i].audio_section_name )
     
-    #spoon_fight_status.loops['/loop/1'].loop_mode = LOOP_MODES.STOP
+    spoon_fight_status.loops['/loop/1'].loop_mode = LOOP_MODES.STOP
     i=1
     spoon_fight_status.loops['/loop/2'].set_audio_buffer( ret_loops[i].get_audio_data(),ret_loops[i].get_slice_points() )
     spoon_fight_status.loops['/loop/2'].set_audio_file_name(ret_loops[i].audio_section_name )
-    #spoon_fight_status.loops['/loop/2'].loop_mode = LOOP_MODES.STOP
+    spoon_fight_status.loops['/loop/2'].loop_mode = LOOP_MODES.STOP
     i=2
     spoon_fight_status.loops['/loop/3'].set_audio_buffer( ret_loops[i].get_audio_data(),ret_loops[i].get_slice_points() )
     spoon_fight_status.loops['/loop/3'].set_audio_file_name(ret_loops[i].audio_section_name )
-    #spoon_fight_status.loops['/loop/3'].loop_mode = LOOP_MODES.STOP
+    spoon_fight_status.loops['/loop/3'].loop_mode = LOOP_MODES.STOP
     i=3
     spoon_fight_status.loops['/loop/4'].set_audio_buffer( ret_loops[i].get_audio_data(),ret_loops[i].get_slice_points() )
     spoon_fight_status.loops['/loop/4'].set_audio_file_name(ret_loops[i].audio_section_name )
-    #spoon_fight_status.loops['/loop/4'].loop_mode = LOOP_MODES.STOP
+    spoon_fight_status.loops['/loop/4'].loop_mode = LOOP_MODES.STOP
     
     # start the OSC server
     # returns a tuple of OSC server, and the thread it is in.

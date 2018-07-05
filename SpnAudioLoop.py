@@ -35,7 +35,15 @@ class SpnAudioLoop():
     def set_audio_file_name(self, new_audio_name):
         self.audio_file_name = new_audio_name
         return
-        
+     
+    def dump_audio_slices():
+        # this resets the array containing the audio buffers so we can load a new audio file.  
+        # this will cause the slices to loose their state when a new loop is loaded with set_audio_buffer
+        # this would require refactoring set_audio_buffer and how audio is loaded into the loop and slices.
+        self.audio_slices = []
+        D("audio slices dumped for {}".format(self.name))
+        return
+     
     def set_audio_buffer(self,new_audio_buffer, new_slice_points):
         #divide the audio up into slice objects
         self.audio_buffer = new_audio_buffer
@@ -160,6 +168,12 @@ class SpnAudioLoop():
         #return audio 
         ret_data = np.zeros([0,2])
         temp_remaining = number_of_samples
+        
+        #if the slices don't exist or are being loaded, return silence.
+        if(len(self.audio_slices)<8):
+            D(" slices empty, returning silence")
+            ret_data = np.zeros([number_of_samples,2])
+            return ret_data
         
         #if all the slices are muted, return silence.
         if(self.all_slices_muted or self.loop_mode == LOOP_MODES.STOP or self.detect_all_skip() ):

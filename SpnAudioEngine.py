@@ -45,9 +45,10 @@ class SpnAudioEngine():
 		
     def toggle_mute(self):
         # toggles the mute state
+        # returns the new mute state.
         self.mute = (not self.mute)
         L("Mute state toggled.  new state {}".format(str(self.mute)))
-        return
+        return self.mute
 		
     def add_source(self, function_name):
         # TODO work out how to make this wokr :p

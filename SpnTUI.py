@@ -179,7 +179,7 @@ def draw_the_tui(screen, the_status ):
         #draw bottom border
         fill_line(screen,screen.height-1,background=Screen.COLOUR_YELLOW)
         # write the quite message
-        screen.print_at(u'☠  press q to quit  ☠', 2, screen.height-1, attr=Screen.A_BOLD, colour=Screen.COLOUR_RED,bg=Screen.COLOUR_YELLOW)
+        screen.print_at(u'☠  press q to quit  ☠    press m to mute', 2, screen.height-1, attr=Screen.A_BOLD, colour=Screen.COLOUR_RED,bg=Screen.COLOUR_YELLOW)
       
         #draw seperator line
         fill_line(screen,3,char='=')

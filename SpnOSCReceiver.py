@@ -36,7 +36,12 @@ def set_loop_jump(loop_number, new_position, the_status_obj):
 def set_loop_volume(loop_number, new_vol, the_status_obj):
     loop_id_s = "/loop/{}".format(loop_number)
     the_status_obj.loops[loop_id_s].set_volume(new_vol)
-    D("set {} volume to {}".format(loop_ids, new_vol ))
+    D("set {} volume to {}".format(loop_id_s, new_vol ))
+    return
+    
+def try_load_new_file_by_int(loop_number, new_file_number,the_status_obj):
+    # pass an file index number to the system and get the loop to load it.
+    D("attempted setting loop {} to file index {}".format(loop_number, new_file_number))
     return
     
 def loop_mode_callback(unused_addr, args, the_OSC_message_argument):
@@ -188,6 +193,8 @@ def loop_volume_callback(unused_addr, args, the_OSC_message_argument ):
     loop_i = -1
     new_volume_level = -1.0
 
+    message_ok=True
+    
     the_status_obj = args[0]
     #get the loop id. /loop/*
     try:
