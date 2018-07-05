@@ -141,6 +141,9 @@ def draw_loop_box(screen,loop_to_display, loop_number):
     screen.print_at(loop_to_display.loop_mode, 54, loop_y_offset, colour=fgc, bg=bgc)
     screen.print_at("]",60, loop_y_offset, colour=Screen.COLOUR_BLACK, bg=Screen.COLOUR_WHITE )
     
+    tmp_vol_s = "V:{0:.2f}".format(loop_to_display.volume_gain)
+    screen.print_at(tmp_vol_s, 73, loop_y_offset, colour=Screen.COLOUR_BLACK, bg=Screen.COLOUR_WHITE)
+    
     draw_loop_slices( screen, loop_to_display, 11, loop_y_offset)    
     return
 
