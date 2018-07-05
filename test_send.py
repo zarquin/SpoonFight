@@ -15,7 +15,22 @@ import random
 import time
 
 test_modes  =   ['PLY','MTE','SKP','RVS','RND','DBL','HLF']
-loop_modes = ['PLAY','STOP','REVS','RAND']
+loop_modes = ['PLAY','REVS','RAND','STOP']
+
+def send_random_file_change():
+    new_file_index=random.randint(0,7)
+    new_loop_i = random.randint(1,4)
+    message_string="/loop/{}/file".format(new_loop_i)
+    client.send_message(message_string, new_file_index)
+    print ("sent: {} {} ".format(message_string,new_file_index))
+    #should really send a play message to start the new file ASAP
+    time.sleep(0.05)
+    message_string="/loop/{}/mode".format(new_loop_i)
+    play_mode_i=random.randint(0,2)
+    client.send_message(message_string, loop_modes[play_mode_i])
+    print ("sent: {} {} ".format(message_string,loop_modes[play_mode_i]))
+    
+    return
 
 def send_random_slice():
    new_slice_mode = test_modes[random.randint(0,6)]
@@ -78,6 +93,7 @@ if __name__ == "__main__":
   parser.add_argument("--sendone", action='store_true', help="set all loop and slice playback to PLAY then exits")
   parser.add_argument("--setallslicemode",type=int,help="set all slices to the same playback mode", default=-1)
   parser.add_argument("--time",type=float,help="time between random messages",default=0.1)
+  parser.add_argument("--loadfiletest",action='store_true',help="send a single load file message the quit")
   args = parser.parse_args()
 
   client = udp_client.SimpleUDPClient(args.ip, args.port)
@@ -87,6 +103,10 @@ if __name__ == "__main__":
       set_all_play()
       exit()
       
+  if (args.loadfiletest):
+      send_random_file_change()
+      exit()
+  
   if(args.sendone):
       send_one()
       exit()
@@ -96,10 +116,10 @@ if __name__ == "__main__":
           set_all_slices_mode(args.setallslicemode)
           exit()
   
-  funfun=[send_random_loop, send_random_slice, send_random_volume]
+  funfun=[send_random_loop, send_random_slice, send_random_slice, send_random_slice, send_random_volume, send_random_file_change]
   
   while True:
-      j = random.randint(0,2)
+      j = random.randint(0,(len(funfun)-1))
       funfun[j]()
       time.sleep(args.time)
       

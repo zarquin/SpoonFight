@@ -41,6 +41,8 @@ def set_loop_volume(loop_number, new_vol, the_status_obj):
     
 def try_load_new_file_by_int(loop_number, new_file_number,the_status_obj):
     # pass an file index number to the system and get the loop to load it.
+    loop_id_s = "/loop/{}".format(loop_number)
+    the_status_obj.load_new_audio_file_by_index(loop_id_s, new_file_number)
     D("attempted setting loop {} to file index {}".format(loop_number, new_file_number))
     return
     
@@ -93,7 +95,6 @@ def loop_jump_callback(unused_addr, args, the_OSC_message_argument):
     if(len(unused_addr) != 12):
         message_ok = False
 
-    
     the_status_obj = args[0]
     try:
         loop_s = unused_addr[6]
@@ -113,10 +114,7 @@ def loop_jump_callback(unused_addr, args, the_OSC_message_argument):
     if(jump_i >7 or jump_i <0):
         D("jump value out of range {}".format(jump_i))
         message_ok = False
-    
-    
-    
-    
+        
     if(message_ok):
         set_loop_jump(loop_i, jump_i, the_status_obj)
         the_status_obj.set_osc_message( "{} : {}  DONE".format(unused_addr, the_OSC_message_argument))
@@ -125,7 +123,7 @@ def loop_jump_callback(unused_addr, args, the_OSC_message_argument):
         #TODO fix this error message
         L("unable to parse message {} {} ".format(unused_addr, the_OSC_message_argument))
         the_status_obj.set_osc_message( "{} : {}  FAIL".format(unused_addr, the_OSC_message_argument))
-        return
+    return
         
     
 def slice_callback(unused_addr, args, the_OSC_message_argument):
@@ -236,7 +234,35 @@ def loop_volume_callback(unused_addr, args, the_OSC_message_argument ):
  
 def loop_file_callback(unused_addr, args, the_OSC_message_argument):
     D("loop file callback")
-    D("un-implemented!!")
+    # has an argument of an int.
+    message_ok=True
+    
+    the_status_obj = args[0]
+    #get the loop id. /loop/*
+    try:
+        loop_s = unused_addr[6]
+        loop_i = int(loop_s)
+        # get the track index
+        new_track_index=int(the_OSC_message_argument)
+    except Exception as errerr:
+        L("exception with loop_file_callback ")
+        L("Error: {}".format(errerr))
+        message_ok = False
+        return
+    if(loop_i not in range(1,5)):
+        message_ok = False
+    
+    if ( message_ok):
+        try_load_new_file_by_int(loop_i,new_track_index, the_status_obj)
+        the_status_obj.set_osc_message( "{} : {}  DONE".format(unused_addr, the_OSC_message_argument))
+        D("loop_file_callback {} {}".format(loop_i,new_track_index))
+  
+    else:
+        L("message not processed. loop_file_callback")
+        L("Message received {}".format(the_OSC_message_argument))
+        L("Message Received {} ".format(unused_addr))
+        L("Message Received {}".format(args))
+        the_status_obj.set_osc_message( "{} : {}  FAIL".format(unused_addr, the_OSC_message_argument))
     return
     
 def default_callback(unused_addr, args):

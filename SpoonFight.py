@@ -2,7 +2,6 @@
 
 import traceback
 import better_exceptions
-
 import numpy as np
 import soundfile
 import random
@@ -10,20 +9,20 @@ import time
 import sys
 import argparse
 
+import SpoonModes
+import SpnPatchParser
+
 from asciimatics.screen import Screen
 
-import SpoonModes
-MODES= SpoonModes.SpoonSliceModes()
-LOOP_MODES= SpoonModes.SpoonLoopModes()
-
 from spoon_logging import D, L, W, E
-
 from SpnAudioEngine import SpnAudioEngine
 from SpnAudioLoop import SpnAudioLoop
-import SpnPatchParser
 from SpnPatchParser import SpnLoopFile
 from SpnTUI import draw_the_tui
 from SpnOSCReceiver import start_OSC_server
+
+MODES= SpoonModes.SpoonSliceModes()
+LOOP_MODES= SpoonModes.SpoonLoopModes()
 
 DESC_LONG="""
 SpoonFight.py
@@ -85,7 +84,7 @@ class SpoonFightStatus:
         # try to load a new file into a loop.
         # is the requested file index available?
         
-        if(file_index <0 or file_index > len(self.audio_loop_files) ):
+        if(file_index <0 or file_index >= len(self.audio_loop_files) ):
             # file index is out of bounds.  give feedback and return without doing anything else.
             self.set_status_message(" Attempted to set new loop{} file. out of bounds {}".format(loop_name, file_index))
             self.set_status_message(" there are {} audio files avalaible".format(len(self.audio_loop_files)))
@@ -94,7 +93,7 @@ class SpoonFightStatus:
         # get the audio file and slice point information and copy over.
         temp_audio_data = self.audio_loop_files[file_index].get_audio_data()
         temp_slice_points = self.audio_loop_files[file_index].get_slice_points()
-        temp_name = self.audio_loop_files.audio_section_name
+        temp_name = self.audio_loop_files[file_index].audio_section_name
         
         #stop the loop.
         self.loops[loop_name].set_loop_mode(LOOP_MODES.STOP)
@@ -199,7 +198,9 @@ def main():
     ret_loops = SpnPatchParser.SpnPatchParser(args.patchfile)
     
     spoon_fight_status.set_status_message("loaded {} loops".format(len(ret_loops)))
-    spoon_fight_status.add_audio_loop_files(ret_loops)
+    
+    for at in ret_loops:
+        spoon_fight_status.add_audio_loop_files(at)
     
     i=0
     spoon_fight_status.loops['/loop/1'].set_audio_buffer( ret_loops[i].get_audio_data(),ret_loops[i].get_slice_points() )

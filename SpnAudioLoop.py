@@ -36,7 +36,7 @@ class SpnAudioLoop():
         self.audio_file_name = new_audio_name
         return
      
-    def dump_audio_slices():
+    def dump_audio_slices(self):
         # this resets the array containing the audio buffers so we can load a new audio file.  
         # this will cause the slices to loose their state when a new loop is loaded with set_audio_buffer
         # this would require refactoring set_audio_buffer and how audio is loaded into the loop and slices.
