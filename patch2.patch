@@ -1,0 +1,31 @@
+# test spoon fight patch file
+# loops created by me.
+[Amen]
+filepath=loops/demo-amenLoop01.wav
+
+[bass synth]
+filepath=loops/demo-bassSynth01.wav
+
+[Rhodes]
+filepath=loops/demo-rhodes01.wav
+
+[congas]
+filepath=loops/demo-conga01.wav
+
+[Triangle]
+filepath=loops/TriangleLoopOne.wav
+
+[Shaker]
+filepath=loops/ShakerLoopOne.wav
+
+[bassobne]
+filepath=loops/BassLoopOne.wav
+
+[Shaker2]
+filepath=loops/ShakerLoopTwo.wav
+
+[drumeloopone]
+filepath=loops/DrumLoopOne.wav
+
+[triangle2]
+filepath=loops/TriangleLoopTwo.wav

@@ -1,0 +1,31 @@
+# test spoon fight patch file
+# loops created by me.
+[KickDrum]
+filepath=loops/KICKDRUMONE.wav
+
+[SnareandHat]
+filepath=loops/SNAREHATONE.wav
+
+[badAzBass]
+filepath=loops/SHITTYBASSONE.wav
+
+[PAD]
+filepath=loops/WEIRDNOISEONE.wav
+
+[Triangle]
+filepath=loops/TriangleLoopOne.wav
+
+[Shaker]
+filepath=loops/ShakerLoopOne.wav
+
+[bassobne]
+filepath=loops/BassLoopOne.wav
+
+[Shaker2]
+filepath=loops/ShakerLoopTwo.wav
+
+[drumeloopone]
+filepath=loops/DrumLoopOne.wav
+
+[triangle2]
+filepath=loops/TriangleLoopTwo.wav
